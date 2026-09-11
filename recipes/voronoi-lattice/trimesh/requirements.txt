@@ -1,0 +1,5 @@
+numpy
+scipy
+trimesh
+rtree
+manifold3d
