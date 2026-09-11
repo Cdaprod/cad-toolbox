@@ -878,7 +878,7 @@ def print_layout(cfg: EnclosureConfig, gap: float = 12.0) -> Compound:
 
 def export_all(
     cfg: EnclosureConfig,
-    export_dir: Path = Path("exports"),
+    export_dir: Path = Path("exports") / "doesbot-enclosure",
     *,
     export_meshes: bool = True,
 ) -> None:
