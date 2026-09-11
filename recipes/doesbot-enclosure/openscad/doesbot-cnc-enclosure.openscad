@@ -1,0 +1,1256 @@
+//
+// ============================================================================
+// DOESBOT CNC CONTROLLER ENCLOSURE
+// ============================================================================
+//
+// Parametric two-piece enclosure for approximately:
+//
+//      PCB: 5.000" x 3.375"
+//           127.000 x 85.725 mm
+//
+// Design:
+//   - Bottom tray contains PCB and connector exits
+//   - Removable top lid
+//   - Internal perimeter locating lip
+//   - Four enclosure screw bosses
+//   - Four PCB mounting bosses
+//   - Parametric connector / cable notches
+//   - Top exhaust ventilation
+//   - Bottom intake ventilation
+//
+// OpenSCAD units are millimeters.
+//
+// ============================================================================
+
+
+// ============================================================================
+// 0. RENDER MODE
+// ============================================================================
+//
+// "assembly"
+// "exploded"
+// "bottom"
+// "top"
+// "reference"
+// "cutters"
+//
+PART = "assembly";
+
+
+// ============================================================================
+// 1. QUALITY
+// ============================================================================
+
+$fn = 48;
+
+
+// ============================================================================
+// 2. PCB DIMENSIONS
+// ============================================================================
+
+// Actual board dimensions supplied:
+PCB_X = 127.000;       // 5.000"
+PCB_Y = 85.725;        // 3.375"
+
+// Approximate bare PCB thickness.
+PCB_Z = 1.60;
+
+
+// ============================================================================
+// 3. ENCLOSURE CLEARANCES
+// ============================================================================
+
+// Horizontal breathing room between PCB edge and inside wall.
+PCB_CLEARANCE_X = 6.0;
+PCB_CLEARANCE_Y = 6.0;
+
+// Vertical gap between enclosure floor and PCB.
+PCB_STANDOFF_HEIGHT = 7.0;
+
+// Estimated component height above PCB.
+// Increase this after measuring tallest part.
+PCB_COMPONENT_HEIGHT = 18.0;
+
+// Additional room above tallest electronics for wires,
+// connector bend radius, serviceability, etc.
+TOP_WIRE_CLEARANCE = 24.0;
+
+
+// ============================================================================
+// 4. ENCLOSURE CONSTRUCTION
+// ============================================================================
+
+WALL = 2.50;
+
+BOTTOM_FLOOR = 2.50;
+
+TOP_ROOF = 2.50;
+
+
+// Corner radius for main enclosure.
+CORNER_RADIUS = 5.0;
+
+
+// --------------------------------------------------------------------------
+// Lower enclosure wall height
+// --------------------------------------------------------------------------
+//
+// This determines where the enclosure seam sits.
+//
+// The seam is intentionally ABOVE the PCB and most connector bodies,
+// while leaving the top lid responsible mostly for covering the wiring volume.
+//
+BOTTOM_WALL_HEIGHT =
+    PCB_STANDOFF_HEIGHT
+    + PCB_Z
+    + PCB_COMPONENT_HEIGHT
+    + 6.0;
+
+
+// Top lid wall height.
+TOP_WALL_HEIGHT =
+    TOP_WIRE_CLEARANCE;
+
+
+// Overall bottom height.
+BOTTOM_HEIGHT =
+    BOTTOM_FLOOR
+    + BOTTOM_WALL_HEIGHT;
+
+
+// Overall lid height.
+TOP_HEIGHT =
+    TOP_WALL_HEIGHT
+    + TOP_ROOF;
+
+
+// ============================================================================
+// 5. ENCLOSURE SIZE
+// ============================================================================
+
+// Internal dimensions.
+INNER_X =
+    PCB_X
+    + PCB_CLEARANCE_X * 2;
+
+INNER_Y =
+    PCB_Y
+    + PCB_CLEARANCE_Y * 2;
+
+
+// Exterior footprint.
+OUTER_X =
+    INNER_X
+    + WALL * 2;
+
+OUTER_Y =
+    INNER_Y
+    + WALL * 2;
+
+
+// ============================================================================
+// 6. PCB POSITION
+// ============================================================================
+//
+// PCB origin is lower-left PCB corner.
+//
+// Board is centered by default.
+//
+PCB_ORIGIN_X =
+    WALL
+    + PCB_CLEARANCE_X;
+
+PCB_ORIGIN_Y =
+    WALL
+    + PCB_CLEARANCE_Y;
+
+PCB_ORIGIN_Z =
+    BOTTOM_FLOOR
+    + PCB_STANDOFF_HEIGHT;
+
+
+// ============================================================================
+// 7. PCB MOUNTING HOLES
+// ============================================================================
+//
+// IMPORTANT:
+//
+// These are PLACEHOLDER mounting-hole offsets.
+//
+// Measure:
+//   A = left hole center -> right hole center
+//   B = front hole center -> rear hole center
+//
+// Then update these.
+//
+// Currently assumes approximately 4 mm from PCB edges.
+//
+PCB_HOLE_EDGE_X = 4.0;
+PCB_HOLE_EDGE_Y = 4.0;
+
+PCB_HOLE_X1 = PCB_HOLE_EDGE_X;
+PCB_HOLE_X2 = PCB_X - PCB_HOLE_EDGE_X;
+
+PCB_HOLE_Y1 = PCB_HOLE_EDGE_Y;
+PCB_HOLE_Y2 = PCB_Y - PCB_HOLE_EDGE_Y;
+
+
+// PCB boss geometry.
+PCB_BOSS_OD = 8.0;
+PCB_BOSS_HOLE = 3.2;
+
+
+// Use:
+//    true  = elongated first-prototype mounting slots
+//    false = normal circular holes
+//
+PCB_USE_ADJUSTMENT_SLOTS = true;
+
+
+// Adjustment slot total travel.
+PCB_SLOT_TRAVEL = 4.0;
+
+
+// ============================================================================
+// 8. ENCLOSURE SCREWS
+// ============================================================================
+//
+// Four corner bosses joining top and bottom.
+//
+CASE_SCREW_DIAMETER = 3.2;
+
+CASE_BOSS_OD = 9.0;
+
+
+// Distance of boss center from INNER corner.
+CASE_BOSS_INSET = 7.0;
+
+
+// Boss locations.
+CASE_BOSS_X1 =
+    WALL + CASE_BOSS_INSET;
+
+CASE_BOSS_X2 =
+    OUTER_X - WALL - CASE_BOSS_INSET;
+
+CASE_BOSS_Y1 =
+    WALL + CASE_BOSS_INSET;
+
+CASE_BOSS_Y2 =
+    OUTER_Y - WALL - CASE_BOSS_INSET;
+
+
+// ============================================================================
+// 9. LID LOCATING LIP
+// ============================================================================
+//
+// Bottom gets a raised internal perimeter tongue.
+//
+// Lid receives slightly larger mating cavity.
+//
+// PLA first prototype:
+// 0.25 mm clearance per mating surface is a reasonable start.
+//
+LIP_HEIGHT = 3.0;
+
+LIP_THICKNESS = 1.5;
+
+LIP_CLEARANCE = 0.30;
+
+
+// ============================================================================
+// 10. CONNECTOR / CABLE CUTOUTS
+// ============================================================================
+//
+// Coordinate convention:
+//
+// LONG SIDE 1:
+//     Y = 0 side
+//
+// LONG SIDE 2:
+//     Y = OUTER_Y side
+//
+// SHORT SIDE 1:
+//     X = 0 side
+//
+// SHORT SIDE 2:
+//     X = OUTER_X side
+//
+//
+// These deliberately extend upward through the seam,
+// creating service-friendly U-shaped connector notches.
+//
+// Disable individual ports with `enabled = false` equivalent
+// by setting dimensions to zero or commenting calls below.
+//
+// --------------------------------------------------------------------------
+
+
+// Long side 1 port A
+LS1_A_X = PCB_ORIGIN_X + 24;
+LS1_A_W = 22;
+LS1_A_Z = PCB_ORIGIN_Z - 1;
+LS1_A_H = 17;
+
+
+// Long side 1 port B
+LS1_B_X = PCB_ORIGIN_X + 65;
+LS1_B_W = 26;
+LS1_B_Z = PCB_ORIGIN_Z - 1;
+LS1_B_H = 17;
+
+
+// Long side 2 port A
+LS2_A_X = PCB_ORIGIN_X + 22;
+LS2_A_W = 24;
+LS2_A_Z = PCB_ORIGIN_Z - 1;
+LS2_A_H = 17;
+
+
+// Long side 2 port B
+LS2_B_X = PCB_ORIGIN_X + 82;
+LS2_B_W = 24;
+LS2_B_Z = PCB_ORIGIN_Z - 1;
+LS2_B_H = 17;
+
+
+// Short side 1
+SS1_Y = PCB_ORIGIN_Y + 58;
+SS1_W = 18;
+SS1_Z = PCB_ORIGIN_Z - 1;
+SS1_H = 18;
+
+
+// Short side 2 / USB-ish opening
+SS2_Y = PCB_ORIGIN_Y + 56;
+SS2_W = 18;
+SS2_Z = PCB_ORIGIN_Z - 1;
+SS2_H = 18;
+
+
+// Extra clearance around ports.
+PORT_CLEARANCE = 1.0;
+
+
+// ============================================================================
+// 11. VENTILATION
+// ============================================================================
+
+// Top vent slots.
+TOP_VENT_COUNT = 9;
+
+TOP_VENT_LENGTH = 52;
+
+TOP_VENT_WIDTH = 2.4;
+
+TOP_VENT_SPACING = 5.0;
+
+
+// Location of top exhaust vent bank.
+TOP_VENT_CENTER_X =
+    OUTER_X * 0.35;
+
+TOP_VENT_CENTER_Y =
+    OUTER_Y * 0.50;
+
+
+// Bottom intake.
+BOTTOM_VENT_COUNT = 7;
+
+BOTTOM_VENT_LENGTH = 42;
+
+BOTTOM_VENT_WIDTH = 2.0;
+
+BOTTOM_VENT_SPACING = 5.0;
+
+
+// ============================================================================
+// 12. DEBUG COLORS
+// ============================================================================
+
+COLOR_BOTTOM = [0.22, 0.25, 0.28];
+COLOR_TOP = [0.32, 0.35, 0.38];
+COLOR_PCB = [0.08, 0.25, 0.10];
+COLOR_COMPONENT = [0.15, 0.15, 0.15];
+COLOR_CUTTER = [1.0, 0.1, 0.1, 0.45];
+
+
+// ============================================================================
+// 13. HELPER: ROUNDED RECTANGULAR PRISM
+// ============================================================================
+
+module rounded_box(size = [10,10,10], radius = 2)
+{
+    x = size[0];
+    y = size[1];
+    z = size[2];
+
+    hull()
+    {
+        translate([radius, radius, 0])
+            cylinder(r = radius, h = z);
+
+        translate([x-radius, radius, 0])
+            cylinder(r = radius, h = z);
+
+        translate([radius, y-radius, 0])
+            cylinder(r = radius, h = z);
+
+        translate([x-radius, y-radius, 0])
+            cylinder(r = radius, h = z);
+    }
+}
+
+
+// ============================================================================
+// 14. HELPER: 2D ROUNDED PROFILE
+// ============================================================================
+
+module rounded_profile_2d(x, y, radius)
+{
+    hull()
+    {
+        translate([radius, radius])
+            circle(r = radius);
+
+        translate([x-radius, radius])
+            circle(r = radius);
+
+        translate([radius, y-radius])
+            circle(r = radius);
+
+        translate([x-radius, y-radius])
+            circle(r = radius);
+    }
+}
+
+
+// ============================================================================
+// 15. PCB REFERENCE MODEL
+// ============================================================================
+
+module pcb_reference()
+{
+    // PCB substrate
+    color(COLOR_PCB)
+    translate([
+        PCB_ORIGIN_X,
+        PCB_ORIGIN_Y,
+        PCB_ORIGIN_Z
+    ])
+    cube([
+        PCB_X,
+        PCB_Y,
+        PCB_Z
+    ]);
+
+
+    // Approximate component volume.
+    //
+    // This is intentionally simplified.
+    //
+    color(COLOR_COMPONENT)
+    translate([
+        PCB_ORIGIN_X + 5,
+        PCB_ORIGIN_Y + 5,
+        PCB_ORIGIN_Z + PCB_Z
+    ])
+    cube([
+        PCB_X - 10,
+        PCB_Y - 10,
+        PCB_COMPONENT_HEIGHT
+    ]);
+
+
+    // Show mounting locations.
+    for (x = [PCB_HOLE_X1, PCB_HOLE_X2])
+    for (y = [PCB_HOLE_Y1, PCB_HOLE_Y2])
+    {
+        color("silver")
+        translate([
+            PCB_ORIGIN_X + x,
+            PCB_ORIGIN_Y + y,
+            PCB_ORIGIN_Z - 0.5
+        ])
+        cylinder(
+            d = PCB_BOSS_HOLE,
+            h = PCB_Z + 1
+        );
+    }
+}
+
+
+// ============================================================================
+// 16. PCB MOUNTING BOSS
+// ============================================================================
+
+module pcb_mount_boss()
+{
+    difference()
+    {
+        cylinder(
+            d = PCB_BOSS_OD,
+            h = PCB_STANDOFF_HEIGHT
+        );
+
+        if (PCB_USE_ADJUSTMENT_SLOTS)
+        {
+            hull()
+            {
+                translate([
+                    -PCB_SLOT_TRAVEL/2,
+                    0,
+                    -1
+                ])
+                cylinder(
+                    d = PCB_BOSS_HOLE,
+                    h = PCB_STANDOFF_HEIGHT + 2
+                );
+
+                translate([
+                    PCB_SLOT_TRAVEL/2,
+                    0,
+                    -1
+                ])
+                cylinder(
+                    d = PCB_BOSS_HOLE,
+                    h = PCB_STANDOFF_HEIGHT + 2
+                );
+            }
+        }
+        else
+        {
+            translate([0,0,-1])
+            cylinder(
+                d = PCB_BOSS_HOLE,
+                h = PCB_STANDOFF_HEIGHT + 2
+            );
+        }
+    }
+}
+
+
+// ============================================================================
+// 17. ALL PCB BOSSES
+// ============================================================================
+
+module pcb_mounts()
+{
+    for (x = [PCB_HOLE_X1, PCB_HOLE_X2])
+    for (y = [PCB_HOLE_Y1, PCB_HOLE_Y2])
+    {
+        translate([
+            PCB_ORIGIN_X + x,
+            PCB_ORIGIN_Y + y,
+            BOTTOM_FLOOR
+        ])
+        pcb_mount_boss();
+    }
+}
+
+
+// ============================================================================
+// 18. CASE SCREW BOSS
+// ============================================================================
+
+module case_screw_boss(height)
+{
+    difference()
+    {
+        cylinder(
+            d = CASE_BOSS_OD,
+            h = height
+        );
+
+        translate([0,0,-1])
+        cylinder(
+            d = CASE_SCREW_DIAMETER,
+            h = height + 2
+        );
+    }
+}
+
+
+// ============================================================================
+// 19. BOTTOM CASE SCREW BOSSES
+// ============================================================================
+
+module bottom_case_bosses()
+{
+    for (x = [CASE_BOSS_X1, CASE_BOSS_X2])
+    for (y = [CASE_BOSS_Y1, CASE_BOSS_Y2])
+    {
+        translate([
+            x,
+            y,
+            BOTTOM_FLOOR
+        ])
+        case_screw_boss(
+            BOTTOM_WALL_HEIGHT
+        );
+    }
+}
+
+
+// ============================================================================
+// 20. LONG-SIDE PORT CUTTER
+// ============================================================================
+//
+// side = 0  -> Y minimum wall
+// side = 1  -> Y maximum wall
+//
+module long_side_port(
+    x,
+    width,
+    z,
+    height,
+    side = 0
+)
+{
+    cutter_depth = WALL * 4;
+
+    if (side == 0)
+    {
+        translate([
+            x - PORT_CLEARANCE,
+            -WALL,
+            z - PORT_CLEARANCE
+        ])
+        cube([
+            width + PORT_CLEARANCE*2,
+            cutter_depth,
+            height + PORT_CLEARANCE*2
+        ]);
+    }
+
+    if (side == 1)
+    {
+        translate([
+            x - PORT_CLEARANCE,
+            OUTER_Y - WALL*2,
+            z - PORT_CLEARANCE
+        ])
+        cube([
+            width + PORT_CLEARANCE*2,
+            cutter_depth,
+            height + PORT_CLEARANCE*2
+        ]);
+    }
+}
+
+
+// ============================================================================
+// 21. SHORT-SIDE PORT CUTTER
+// ============================================================================
+//
+// side = 0 -> X minimum
+// side = 1 -> X maximum
+//
+module short_side_port(
+    y,
+    width,
+    z,
+    height,
+    side = 0
+)
+{
+    cutter_depth = WALL * 4;
+
+    if (side == 0)
+    {
+        translate([
+            -WALL,
+            y - PORT_CLEARANCE,
+            z - PORT_CLEARANCE
+        ])
+        cube([
+            cutter_depth,
+            width + PORT_CLEARANCE*2,
+            height + PORT_CLEARANCE*2
+        ]);
+    }
+
+    if (side == 1)
+    {
+        translate([
+            OUTER_X - WALL*2,
+            y - PORT_CLEARANCE,
+            z - PORT_CLEARANCE
+        ])
+        cube([
+            cutter_depth,
+            width + PORT_CLEARANCE*2,
+            height + PORT_CLEARANCE*2
+        ]);
+    }
+}
+
+
+// ============================================================================
+// 22. ALL PORT CUTTERS
+// ============================================================================
+
+module all_port_cutters()
+{
+    // Long side 1
+    long_side_port(
+        LS1_A_X,
+        LS1_A_W,
+        LS1_A_Z,
+        LS1_A_H,
+        0
+    );
+
+    long_side_port(
+        LS1_B_X,
+        LS1_B_W,
+        LS1_B_Z,
+        LS1_B_H,
+        0
+    );
+
+
+    // Long side 2
+    long_side_port(
+        LS2_A_X,
+        LS2_A_W,
+        LS2_A_Z,
+        LS2_A_H,
+        1
+    );
+
+    long_side_port(
+        LS2_B_X,
+        LS2_B_W,
+        LS2_B_Z,
+        LS2_B_H,
+        1
+    );
+
+
+    // Short end 1
+    short_side_port(
+        SS1_Y,
+        SS1_W,
+        SS1_Z,
+        SS1_H,
+        0
+    );
+
+
+    // Short end 2
+    short_side_port(
+        SS2_Y,
+        SS2_W,
+        SS2_Z,
+        SS2_H,
+        1
+    );
+}
+
+
+// ============================================================================
+// 23. VENT SLOT
+// ============================================================================
+
+module vent_slot(length, width, height)
+{
+    hull()
+    {
+        translate([
+            -length/2 + width/2,
+            0,
+            0
+        ])
+        cylinder(
+            d = width,
+            h = height
+        );
+
+        translate([
+            length/2 - width/2,
+            0,
+            0
+        ])
+        cylinder(
+            d = width,
+            h = height
+        );
+    }
+}
+
+
+// ============================================================================
+// 24. TOP VENT CUTTERS
+// ============================================================================
+
+module top_vent_cutters()
+{
+    total_span =
+        (TOP_VENT_COUNT - 1)
+        * TOP_VENT_SPACING;
+
+    for (i = [0 : TOP_VENT_COUNT-1])
+    {
+        y =
+            TOP_VENT_CENTER_Y
+            - total_span/2
+            + i * TOP_VENT_SPACING;
+
+        translate([
+            TOP_VENT_CENTER_X,
+            y,
+            TOP_WALL_HEIGHT - 1
+        ])
+        vent_slot(
+            TOP_VENT_LENGTH,
+            TOP_VENT_WIDTH,
+            TOP_ROOF + 2
+        );
+    }
+}
+
+
+// ============================================================================
+// 25. BOTTOM INTAKE VENT CUTTERS
+// ============================================================================
+
+module bottom_vent_cutters()
+{
+    total_span =
+        (BOTTOM_VENT_COUNT - 1)
+        * BOTTOM_VENT_SPACING;
+
+    for (i = [0 : BOTTOM_VENT_COUNT-1])
+    {
+        y =
+            OUTER_Y/2
+            - total_span/2
+            + i * BOTTOM_VENT_SPACING;
+
+        translate([
+            OUTER_X * 0.68,
+            y,
+            -1
+        ])
+        vent_slot(
+            BOTTOM_VENT_LENGTH,
+            BOTTOM_VENT_WIDTH,
+            BOTTOM_FLOOR + 2
+        );
+    }
+}
+
+
+// ============================================================================
+// 26. BOTTOM OUTER SHELL
+// ============================================================================
+
+module bottom_shell()
+{
+    difference()
+    {
+        rounded_box(
+            [OUTER_X, OUTER_Y, BOTTOM_HEIGHT],
+            CORNER_RADIUS
+        );
+
+        // Main internal cavity.
+        translate([
+            WALL,
+            WALL,
+            BOTTOM_FLOOR
+        ])
+        rounded_box(
+            [
+                INNER_X,
+                INNER_Y,
+                BOTTOM_HEIGHT + 2
+            ],
+            max(
+                CORNER_RADIUS - WALL,
+                1
+            )
+        );
+    }
+}
+
+
+// ============================================================================
+// 27. CONTINUOUS BOTTOM LOCATING LIP
+// ============================================================================
+//
+// Raised tongue running around inside perimeter.
+//
+module bottom_locating_lip()
+{
+    z =
+        BOTTOM_HEIGHT
+        - LIP_HEIGHT;
+
+    outer_lip_x =
+        INNER_X;
+
+    outer_lip_y =
+        INNER_Y;
+
+    difference()
+    {
+        translate([
+            WALL,
+            WALL,
+            z
+        ])
+        linear_extrude(height = LIP_HEIGHT)
+        rounded_profile_2d(
+            outer_lip_x,
+            outer_lip_y,
+            max(CORNER_RADIUS-WALL, 1)
+        );
+
+        translate([
+            WALL + LIP_THICKNESS,
+            WALL + LIP_THICKNESS,
+            z - 1
+        ])
+        linear_extrude(height = LIP_HEIGHT + 2)
+        rounded_profile_2d(
+            outer_lip_x - LIP_THICKNESS*2,
+            outer_lip_y - LIP_THICKNESS*2,
+            max(
+                CORNER_RADIUS
+                - WALL
+                - LIP_THICKNESS,
+                0.5
+            )
+        );
+    }
+}
+
+
+// ============================================================================
+// 28. COMPLETE BOTTOM
+// ============================================================================
+
+module bottom()
+{
+    color(COLOR_BOTTOM)
+    difference()
+    {
+        union()
+        {
+            bottom_shell();
+
+            pcb_mounts();
+
+            bottom_case_bosses();
+
+            bottom_locating_lip();
+        }
+
+        all_port_cutters();
+
+        bottom_vent_cutters();
+    }
+}
+
+
+// ============================================================================
+// 29. TOP OUTER BODY
+// ============================================================================
+
+module top_outer()
+{
+    rounded_box(
+        [
+            OUTER_X,
+            OUTER_Y,
+            TOP_HEIGHT
+        ],
+        CORNER_RADIUS
+    );
+}
+
+
+// ============================================================================
+// 30. TOP MAIN CAVITY
+// ============================================================================
+
+module top_main_cavity()
+{
+    translate([
+        WALL,
+        WALL,
+        -1
+    ])
+    rounded_box(
+        [
+            INNER_X,
+            INNER_Y,
+            TOP_WALL_HEIGHT + 1
+        ],
+        max(
+            CORNER_RADIUS-WALL,
+            1
+        )
+    );
+}
+
+
+// ============================================================================
+// 31. TOP LIP CLEARANCE CAVITY
+// ============================================================================
+//
+// Creates the female side of the bottom tongue.
+//
+// Uses the same perimeter geometry plus controlled clearance.
+//
+module top_lip_clearance()
+{
+    lip_outer_x =
+        INNER_X
+        + LIP_CLEARANCE*2;
+
+    lip_outer_y =
+        INNER_Y
+        + LIP_CLEARANCE*2;
+
+    lip_inner_x =
+        INNER_X
+        - LIP_THICKNESS*2
+        - LIP_CLEARANCE*2;
+
+    lip_inner_y =
+        INNER_Y
+        - LIP_THICKNESS*2
+        - LIP_CLEARANCE*2;
+
+    difference()
+    {
+        translate([
+            WALL - LIP_CLEARANCE,
+            WALL - LIP_CLEARANCE,
+            -1
+        ])
+        linear_extrude(
+            height = LIP_HEIGHT + 2
+        )
+        rounded_profile_2d(
+            lip_outer_x,
+            lip_outer_y,
+            max(
+                CORNER_RADIUS
+                - WALL
+                + LIP_CLEARANCE,
+                1
+            )
+        );
+
+        translate([
+            WALL
+            + LIP_THICKNESS
+            + LIP_CLEARANCE,
+
+            WALL
+            + LIP_THICKNESS
+            + LIP_CLEARANCE,
+
+            -2
+        ])
+        linear_extrude(
+            height = LIP_HEIGHT + 4
+        )
+        rounded_profile_2d(
+            lip_inner_x,
+            lip_inner_y,
+            max(
+                CORNER_RADIUS
+                - WALL
+                - LIP_THICKNESS
+                - LIP_CLEARANCE,
+                0.5
+            )
+        );
+    }
+}
+
+
+// ============================================================================
+// 32. TOP SCREW HOLES
+// ============================================================================
+//
+// Through-holes through roof and lid bosses.
+//
+module top_screw_holes()
+{
+    for (x = [CASE_BOSS_X1, CASE_BOSS_X2])
+    for (y = [CASE_BOSS_Y1, CASE_BOSS_Y2])
+    {
+        translate([
+            x,
+            y,
+            -1
+        ])
+        cylinder(
+            d = CASE_SCREW_DIAMETER,
+            h = TOP_HEIGHT + 2
+        );
+    }
+}
+
+
+// ============================================================================
+// 33. TOP INTERNAL BOSS SUPPORTS
+// ============================================================================
+
+module top_case_bosses()
+{
+    boss_height =
+        TOP_WALL_HEIGHT;
+
+    for (x = [CASE_BOSS_X1, CASE_BOSS_X2])
+    for (y = [CASE_BOSS_Y1, CASE_BOSS_Y2])
+    {
+        translate([
+            x,
+            y,
+            0
+        ])
+        difference()
+        {
+            cylinder(
+                d = CASE_BOSS_OD,
+                h = boss_height
+            );
+
+            translate([0,0,-1])
+            cylinder(
+                d = CASE_SCREW_DIAMETER,
+                h = boss_height + 2
+            );
+        }
+    }
+}
+
+
+// ============================================================================
+// 34. COMPLETE TOP
+// ============================================================================
+
+module top()
+{
+    color(COLOR_TOP)
+    difference()
+    {
+        union()
+        {
+            difference()
+            {
+                top_outer();
+
+                top_main_cavity();
+            }
+
+            top_case_bosses();
+        }
+
+        // mating relief
+        top_lip_clearance();
+
+        // screws
+        top_screw_holes();
+
+        // ventilation
+        top_vent_cutters();
+    }
+}
+
+
+// ============================================================================
+// 35. SHOW PORT CUTTERS
+// ============================================================================
+
+module cutter_debug()
+{
+    color(COLOR_CUTTER)
+    all_port_cutters();
+}
+
+
+// ============================================================================
+// 36. ASSEMBLY
+// ============================================================================
+
+module assembly()
+{
+    bottom();
+
+    pcb_reference();
+
+    translate([
+        0,
+        0,
+        BOTTOM_HEIGHT
+    ])
+    top();
+}
+
+
+// ============================================================================
+// 37. EXPLODED VIEW
+// ============================================================================
+
+module exploded()
+{
+    bottom();
+
+    translate([
+        0,
+        0,
+        10
+    ])
+    pcb_reference();
+
+    translate([
+        0,
+        0,
+        BOTTOM_HEIGHT + 30
+    ])
+    top();
+}
+
+
+// ============================================================================
+// 38. OUTPUT SELECTOR
+// ============================================================================
+
+if (PART == "assembly")
+{
+    assembly();
+}
+
+else if (PART == "exploded")
+{
+    exploded();
+}
+
+else if (PART == "bottom")
+{
+    bottom();
+}
+
+else if (PART == "top")
+{
+    top();
+}
+
+else if (PART == "reference")
+{
+    pcb_reference();
+}
+
+else if (PART == "cutters")
+{
+    bottom_shell();
+    cutter_debug();
+}

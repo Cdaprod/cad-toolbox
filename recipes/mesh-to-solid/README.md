@@ -1,3 +1,3 @@
 # mesh-to-solid
 
-Repeatable workflow workspace. Promote reusable logic into `src/cadtoolbox/`.
+Repair a mesh and document a controlled mesh→BREP workflow.

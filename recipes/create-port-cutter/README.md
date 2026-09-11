@@ -1,3 +1,3 @@
 # create-port-cutter
 
-Repeatable workflow workspace. Promote reusable logic into `src/cadtoolbox/`.
+Generate a parametric rectangular port cutter.

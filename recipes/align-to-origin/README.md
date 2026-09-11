@@ -1,3 +1,3 @@
 # align-to-origin
 
-Repeatable workflow workspace. Promote reusable logic into `src/cadtoolbox/`.
+Center a mesh in XY and place its bottom at Z=0.

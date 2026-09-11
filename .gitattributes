@@ -1,4 +1,5 @@
 * text=auto
+
 *.step binary
 *.stp binary
 *.iges binary
@@ -11,3 +12,4 @@
 *.obj binary
 *.ply binary
 *.glb binary
+*.gltf binary

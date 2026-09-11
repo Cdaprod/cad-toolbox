@@ -1,3 +1,3 @@
 # split-enclosure
 
-Repeatable workflow workspace. Promote reusable logic into `src/cadtoolbox/`.
+Split a build123d solid using a user-supplied plane.

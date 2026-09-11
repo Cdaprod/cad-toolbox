@@ -1,3 +1,3 @@
 # import-reference-model
 
-Repeatable workflow workspace. Promote reusable logic into `src/cadtoolbox/`.
+Load a STEP reference and report its bounding box using build123d.
