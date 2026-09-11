@@ -44,6 +44,7 @@ from build123d import (
     Rot,
     export_step,
     export_stl,
+    export_gltf,
 )
 
 
@@ -891,6 +892,7 @@ def export_all(
     exploded = assembly_compound(cfg, exploded=True)
     printable = print_layout(cfg)
 
+    # Authoritative CAD exports
     export_step(bottom, export_dir / "doesbot-bottom.step")
     export_step(top, export_dir / "doesbot-top.step")
     export_step(pcb, export_dir / "doesbot-pcb-reference.step")
@@ -898,8 +900,19 @@ def export_all(
     export_step(exploded, export_dir / "doesbot-exploded.step")
     export_step(printable, export_dir / "doesbot-print-layout.step")
 
+    # Browser-friendly preview of the assembled model.
+    # This uses the existing in-memory assembly; it does not create
+    # another STEP file or re-import any exported geometry.
+    export_gltf(
+        assembled,
+        export_dir / "doesbot-assembly.glb",
+        binary=True,
+        linear_deflection=0.1,
+        angular_deflection=0.1,
+    )
+
     if export_meshes:
-        # STL parts only; assembly STEP remains the better inspection format.
+        # STL parts only; GLB is used for browser inspection of the assembly.
         export_stl(bottom, export_dir / "doesbot-bottom.stl")
         export_stl(top, export_dir / "doesbot-top.stl")
 
@@ -910,9 +923,9 @@ def export_all(
     print(f"  Bottom height:    {cfg.bottom_height:.3f} mm")
     print(f"  Lid height:       {cfg.top_height:.3f} mm")
     print(f"  Overall closed:   {cfg.bottom_height + cfg.top_height:.3f} mm")
-    print(f"  Output:            {export_dir.resolve()}")
-
-
+    print(f"  Output:           {export_dir.resolve()}")
+    print(f"  Browser preview:  {(export_dir / 'doesbot-assembly.glb').resolve()}")
+ 
 # -----------------------------------------------------------------------------
 # ENTRY POINT
 # -----------------------------------------------------------------------------
