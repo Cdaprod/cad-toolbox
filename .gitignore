@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.DS_Store
+Thumbs.db
+*.FCStd1
+*.blend1
+*.blend2
+*~
+*.bak
+exports/
+**/exports/
+out/
+**/out/
+assets/downloads/*
+!assets/downloads/.gitkeep

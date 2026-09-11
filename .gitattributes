@@ -1,0 +1,13 @@
+* text=auto
+*.step binary
+*.stp binary
+*.iges binary
+*.igs binary
+*.brep binary
+*.fcstd binary
+*.blend binary
+*.stl binary
+*.3mf binary
+*.obj binary
+*.ply binary
+*.glb binary
