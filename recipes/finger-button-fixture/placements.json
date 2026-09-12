@@ -1,0 +1,38 @@
+{
+  "units": "mm",
+  "rotation_units": "degrees",
+  "notes": [
+    "These are EXAMPLE placements only.",
+    "Local +Z of every fixture should point outward from the grip surface.",
+    "Tune XYZ + RX/RY/RZ against your actual grip STEP."
+  ],
+  "buttons": [
+    {
+      "name": "index",
+      "x": 0.0,
+      "y": 0.0,
+      "z": 0.0,
+      "rx": 0.0,
+      "ry": 0.0,
+      "rz": 0.0
+    },
+    {
+      "name": "middle",
+      "x": 15.5,
+      "y": 0.0,
+      "z": 0.0,
+      "rx": 0.0,
+      "ry": 7.0,
+      "rz": 0.0
+    },
+    {
+      "name": "ring",
+      "x": 31.0,
+      "y": 0.0,
+      "z": 0.0,
+      "rx": 0.0,
+      "ry": 14.0,
+      "rz": 0.0
+    }
+  ]
+}
